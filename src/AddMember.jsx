@@ -6,6 +6,7 @@ export default function AddMember({ add }) {
   const [name, setName] = useState('');
   const [dept, setDept] = useState('');
   const [gender, setGender] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const checkValues = () => {
     if (name.length > 0 && dept.length > 0 && gender.length > 0) {
@@ -13,7 +14,10 @@ export default function AddMember({ add }) {
       setName('');
       setDept('');
       setGender('');
+      setErrorMessage('');
+      return true;
     }
+    setErrorMessage('内容に不備があります');
   };
 
   return (
@@ -54,6 +58,7 @@ export default function AddMember({ add }) {
           type="radio"
           name="gender"
           value="女性"
+          id="female"
           checked={gender === '女性'}
           onChange={e => setGender(e.target.value)}
         />
@@ -63,6 +68,7 @@ export default function AddMember({ add }) {
         onClickFunction={() => checkValues()}
         text="登録"
       />
+      {errorMessage && <span>{errorMessage}</span>}
     </div>
   );
 }

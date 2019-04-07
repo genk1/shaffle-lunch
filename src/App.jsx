@@ -74,7 +74,17 @@ const App = () => {
 
   return (
     <section style={{ maxWidth: '880px', margin: 'auto' }}>
+      <h1 style={{ textAlign: 'center' }}>
+        <span role="img" aria-label="React Holiday Two">
+        ⚛️🍣🙈🍔
+        </span>
+        シャッフルランチ第１回目
+        <span role="img" aria-label="React Holiday Two">
+        🍔🙈🍣⚛️
+        </span>
+      </h1>
       <div>
+        <h3>参加者一覧</h3>
         <MemberInfo
           members={memberState.members}
           remove={removeMemberInfo => dispatch({ type: 'REMOVE_MEMBER', member: removeMemberInfo })}
@@ -86,9 +96,13 @@ const App = () => {
         }}
         />
       </div>
-      <AddMember add={addMemberInfo => dispatch({ type: 'ADD_MEMBER', member: addMemberInfo })} />
+      <div>
+        <h3>追加</h3>
+        <AddMember add={addMemberInfo => dispatch({ type: 'ADD_MEMBER', member: addMemberInfo })} />
+      </div>
 
       <div>
+        <h3>グループ作成</h3>
         <input type="number" name="max-number" id="max-number" defaultValue="4" min="1" step="1" placeholder="最大人数" />
         <Button
           onClickFunction={

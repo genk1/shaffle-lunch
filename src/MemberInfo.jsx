@@ -10,7 +10,7 @@ export default function MemberInfo({ members, remove }) {
         display: 'inline-flex',
         marginRight: '.25em',
         borderRadius: '.25em',
-        padding: '.5em 1em',
+        padding: '.15em 1em',
         color: 'blue',
         fontWeight: 'bold',
         ...style,
@@ -49,12 +49,12 @@ export default function MemberInfo({ members, remove }) {
         <li
           key={member.name}
           style={{
-            width: '33%',
+            width: '25%',
             display: 'block',
             float: 'left',
           }}
         >
-          <DepartmentMember member={member}>{`${member.name}_${member.gender}`}</DepartmentMember>
+          <DepartmentMember member={member}>{`${member.name}`}</DepartmentMember>
           <Button onClickFunction={() => remove(member)} text="削除" />
         </li>
       ))
