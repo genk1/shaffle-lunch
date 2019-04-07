@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 import React, {
-  useState, useEffect, useReducer, Fragment,
+  useState, useEffect, useReducer,
 } from 'react';
 import AddMember from './AddMember';
 import MemberInfo from './MemberInfo';
@@ -8,19 +9,31 @@ import Button from './Button';
 const initialMember = {
   members: [
     { name: '元紀', dept: '開発', gender: '男性' },
+    { name: '三浦', dept: '開発', gender: '男性' },
+    { name: '石橋', dept: '開発', gender: '男性' },
     { name: '安田', dept: '開発', gender: '女性' },
     { name: '裕太', dept: 'マーケ', gender: '男性' },
+    { name: '皆川', dept: 'マーケ', gender: '男性' },
+    { name: '比嘉', dept: 'マーケ', gender: '男性' },
     { name: '菜々', dept: '開発', gender: '女性' },
     { name: '木内', dept: '営業', gender: '男性' },
+    { name: '中山', dept: '営業', gender: '男性' },
+    { name: '田中', dept: '営業', gender: '男性' },
+    { name: 'みさの', dept: '営業', gender: '女性' },
+    { name: '舘田', dept: '営業', gender: '女性' },
+    { name: '古川', dept: '人事', gender: '男性' },
+    { name: '板屋', dept: '経理', gender: '男性' },
+    { name: '松尾', dept: '総務', gender: '女性' },
+    { name: '小暮', dept: '社長', gender: '男性' },
   ],
 };
 
-const initialPageStatus = '選択中';
-
-const initialGroups = [{ team: 'クジラ' }, { team: 'ライオン' }, { team: 'カメ' }];
+const ASCII_OF_A = 65;
+const MAX_NUMBER_OF_MEMBER = 4;
 
 const shuffle = array => array.sort(() => Math.random() - 0.5);
 
+const convertAsciiToChar = ascii => String.fromCharCode(ascii);
 
 const membersReducer = (state, action) => {
   switch (action.type) {
@@ -28,40 +41,37 @@ const membersReducer = (state, action) => {
     return { members: [...state.members, action.member] };
   case 'REMOVE_MEMBER':
     return { members: state.members.filter(member => member.name !== action.member.name) };
-  case 'SHUFFLE_MEMBER':
-    return { members: shuffle(state.members) };
   default:
     throw new Error();
   }
 };
 
 const App = () => {
-  const [pageStatus, setPageStatus] = useState(initialPageStatus);
   const [memberState, dispatch] = useReducer(membersReducer, initialMember);
-  const [groups, setGroups] = useState([]);
+  const [groupMembers, setGroupMembers] = useState([]);
 
   const arrangeGroupMember = () => {
-    const newGroups = [...groups];
-    const groupsLength = groups.length;
-    const membersLength = memberState.members.length;
-    for (let i = 0; i < membersLength; i + 1) {
-      newGroups[i % groupsLength].member = memberState.members[i].name;
-    }
-    console.log(groups);
-    newGroups[0].member = 'genki';
-    setGroups(newGroups);
-    console.log(groups);
+    const _numberOfGroups = Math.ceil(memberState.members.length / MAX_NUMBER_OF_MEMBER);
+    const _members = JSON.parse(JSON.stringify(memberState));
+
+    for (let i = 0; i < 10; i += 1) { shuffle(_members.members); }
+
+    const _groupMembers = _members.members.reduce((acc, obj, index) => {
+      const key = convertAsciiToChar((index % _numberOfGroups) + ASCII_OF_A);
+      if (!acc[key]) { acc[key] = []; }
+      acc[key] = [...acc[key], obj];
+      return acc;
+    }, []);
+
+    setGroupMembers(_groupMembers);
   };
 
   useEffect(() => {
-    document.title = `現在: ${pageStatus}`;
+    document.title = `参加人数: ${memberState.members.length}人`;
   });
 
   return (
-    <div>
-      <div>
-        {`今日の参加者: ${memberState.members.length}人`}
-      </div>
+    <section>
       <ul>
         {memberState.members.map(member => (
           <MemberInfo
@@ -72,30 +82,30 @@ const App = () => {
         ))}
       </ul>
       <AddMember add={addMemberInfo => dispatch({ type: 'ADD_MEMBER', member: addMemberInfo })} />
-      <Button onClickFunction={() => { dispatch({ type: 'SHUFFLE_MEMBER' }); setPageStatus('シャッフル中'); }} text="シャッフル" />
-      <Button
-        onClickFunction={
-          () => setGroups(initialGroups.slice(0, Math.ceil(memberState.members.length / 4)))
-        }
-        text="グループ作成"
-      />
+
       <div>
-        {groups.length && (
-          <Fragment>
-            <ul>
-              { groups.map(group => <li key={group.team}>{group.team}</li>) }
-            </ul>
-            <Button
-              onClickFunction={
-                () => arrangeGroupMember()
-              }
-              text="グループ作成"
-            />
-          </Fragment>
-        )
-        }
+        <Button
+          onClickFunction={
+            () => arrangeGroupMember()
+          }
+          text="グループ作成"
+        />
       </div>
-    </div>
+      {groupMembers && (
+        <section>
+          <table>
+            <tbody>
+              {Object.keys(groupMembers).map(val => (
+                <tr key={val}>
+                  <th>{val}</th>
+                  {groupMembers[val].map(member => <td key={member.name}>{member.name}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
+    </section>
   );
 };
 
