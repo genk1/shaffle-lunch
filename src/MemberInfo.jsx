@@ -1,17 +1,64 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import Button from './Button';
 
-export default function MemberInfo({ member, remove }) {
+
+export default function MemberInfo({ members, remove }) {
+  const DefaultMember = ({ style, ...props }) => (
+    <span
+      style={{
+        display: 'inline-flex',
+        marginRight: '.25em',
+        borderRadius: '.25em',
+        padding: '.5em 1em',
+        color: 'blue',
+        ...style,
+      }}
+      {...props}
+    />
+  );
+
+  const SalesMember = props => (
+    <DefaultMember style={{ color: 'red' }} {...props} />
+  );
+
+  const MarketingMember = props => (
+    <DefaultMember style={{ color: 'orange' }} {...props} />
+  );
+
+  const SysDevMember = props => (
+    <DefaultMember style={{ color: 'purple' }} {...props} />
+  );
+
+  const DepartmentMember = ({ member }) => {
+    switch (member.dept) {
+    case '開発':
+      return <SysDevMember>{`${member.name}_${member.dept}_${member.gender}`}</SysDevMember>;
+    case '営業':
+      return <SalesMember>{`${member.name}_${member.dept}_${member.gender}`}</SalesMember>;
+    case 'マーケ':
+      return <MarketingMember>{`${member.name}_${member.dept}_${member.gender}`}</MarketingMember>;
+    default:
+      return <DefaultMember>{`${member.name}_${member.dept}_${member.gender}`}</DefaultMember>;
+    }
+  };
   return (
-    <li key={member.name}>
-      {`${member.name}__${member.dept}__${member.gender}`}
-      <button
-        type="button"
-        onClick={() => remove(member)}
-      >
-          削除
-      </button>
-    </li>
+    <Fragment>
+      {members.map(member => (
+        <li
+          key={member.name}
+          style={{
+            width: '33%',
+            display: 'block',
+            float: 'left',
+          }}
+        >
+          <DepartmentMember member={member} />
+          <Button onClickFunction={() => remove(member)} text="削除" />
+        </li>
+      ))
+      }
+    </Fragment>
   );
 }
 

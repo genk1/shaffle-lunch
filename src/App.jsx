@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import AddMember from './AddMember';
 import MemberInfo from './MemberInfo';
+import GroupMembers from './GroupMembers';
 import Button from './Button';
 
 const initialMember = {
@@ -15,7 +16,7 @@ const initialMember = {
     { name: '裕太', dept: 'マーケ', gender: '男性' },
     { name: '皆川', dept: 'マーケ', gender: '男性' },
     { name: '比嘉', dept: 'マーケ', gender: '男性' },
-    { name: '菜々', dept: '開発', gender: '女性' },
+    { name: '菜々', dept: 'マーケ', gender: '女性' },
     { name: '木内', dept: '営業', gender: '男性' },
     { name: '中山', dept: '営業', gender: '男性' },
     { name: '田中', dept: '営業', gender: '男性' },
@@ -29,7 +30,6 @@ const initialMember = {
 };
 
 const ASCII_OF_A = 65;
-const MAX_NUMBER_OF_MEMBER = 4;
 
 const shuffle = array => array.sort(() => Math.random() - 0.5);
 
@@ -50,8 +50,14 @@ const App = () => {
   const [memberState, dispatch] = useReducer(membersReducer, initialMember);
   const [groupMembers, setGroupMembers] = useState([]);
 
+  useEffect(() => {
+    document.title = `参加人数: ${memberState.members.length}人`;
+  });
+
   const arrangeGroupMember = () => {
-    const _numberOfGroups = Math.ceil(memberState.members.length / MAX_NUMBER_OF_MEMBER);
+    setGroupMembers([]);
+    const _maxNumber = Number(document.getElementById('max-number').value);
+    const _numberOfGroups = Math.ceil(memberState.members.length / _maxNumber);
     const _members = JSON.parse(JSON.stringify(memberState));
 
     for (let i = 0; i < 10; i += 1) { shuffle(_members.members); }
@@ -66,24 +72,24 @@ const App = () => {
     setGroupMembers(_groupMembers);
   };
 
-  useEffect(() => {
-    document.title = `参加人数: ${memberState.members.length}人`;
-  });
-
   return (
-    <section>
-      <ul>
-        {memberState.members.map(member => (
-          <MemberInfo
-            key={member.name}
-            member={member}
-            remove={removeMemberInfo => dispatch({ type: 'REMOVE_MEMBER', member: removeMemberInfo })}
-          />
-        ))}
-      </ul>
+    <section style={{ maxWidth: '880px', margin: 'auto' }}>
+      <div>
+        <MemberInfo
+          members={memberState.members}
+          remove={removeMemberInfo => dispatch({ type: 'REMOVE_MEMBER', member: removeMemberInfo })}
+        />
+        <div style={{
+          content: '',
+          clear: 'both',
+          display: 'block',
+        }}
+        />
+      </div>
       <AddMember add={addMemberInfo => dispatch({ type: 'ADD_MEMBER', member: addMemberInfo })} />
 
       <div>
+        <input type="number" name="max-number" id="max-number" defaultValue="4" min="1" step="1" placeholder="最大人数" />
         <Button
           onClickFunction={
             () => arrangeGroupMember()
@@ -91,20 +97,7 @@ const App = () => {
           text="グループ作成"
         />
       </div>
-      {groupMembers && (
-        <section>
-          <table>
-            <tbody>
-              {Object.keys(groupMembers).map(val => (
-                <tr key={val}>
-                  <th>{val}</th>
-                  {groupMembers[val].map(member => <td key={member.name}>{member.name}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      )}
+      {groupMembers && (<GroupMembers groupMembers={groupMembers} />)}
     </section>
   );
 };
