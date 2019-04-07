@@ -12,6 +12,7 @@ export default function MemberInfo({ members, remove }) {
         borderRadius: '.25em',
         padding: '.5em 1em',
         color: 'blue',
+        fontWeight: 'bold',
         ...style,
       }}
       {...props}
@@ -30,16 +31,16 @@ export default function MemberInfo({ members, remove }) {
     <DefaultMember style={{ color: 'purple' }} {...props} />
   );
 
-  const DepartmentMember = ({ member }) => {
+  const DepartmentMember = ({ member, ...props }) => {
     switch (member.dept) {
     case '開発':
-      return <SysDevMember>{`${member.name}_${member.dept}_${member.gender}`}</SysDevMember>;
+      return <SysDevMember {...props} />;
     case '営業':
-      return <SalesMember>{`${member.name}_${member.dept}_${member.gender}`}</SalesMember>;
+      return <SalesMember {...props} />;
     case 'マーケ':
-      return <MarketingMember>{`${member.name}_${member.dept}_${member.gender}`}</MarketingMember>;
+      return <MarketingMember {...props} />;
     default:
-      return <DefaultMember>{`${member.name}_${member.dept}_${member.gender}`}</DefaultMember>;
+      return <DefaultMember {...props} />;
     }
   };
   return (
@@ -53,7 +54,7 @@ export default function MemberInfo({ members, remove }) {
             float: 'left',
           }}
         >
-          <DepartmentMember member={member} />
+          <DepartmentMember member={member}>{`${member.name}_${member.gender}`}</DepartmentMember>
           <Button onClickFunction={() => remove(member)} text="削除" />
         </li>
       ))
