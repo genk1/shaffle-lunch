@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function Button({ onClickFunction, text }) {
   return (
-    <button
-      type="button"
-      onClick={() => onClickFunction()}
-    >
+    <button type="button" onClick={() => onClickFunction()}>
       {text}
     </button>
   );
@@ -17,6 +14,8 @@ Button.propTypes = {
   text: PropTypes.string,
 };
 Button.defaultProps = {
-  onClickFunction: () => { 'FOO'; },
+  onClickFunction: () => {
+    'FOO';
+  },
   text: 'TEXT',
 };

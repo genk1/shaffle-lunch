@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
 
-
 export default function MemberInfo({ members, remove }) {
   const DefaultMember = ({ style, ...props }) => (
     <span
@@ -54,11 +53,20 @@ export default function MemberInfo({ members, remove }) {
             float: 'left',
           }}
         >
-          <DepartmentMember member={member}>{`${member.name}`}</DepartmentMember>
+          <DepartmentMember member={member}>
+            {`${member.name}`}
+          </DepartmentMember>
           <Button onClickFunction={() => remove(member)} text="削除" />
         </li>
-      ))
-      }
+      ))}
+
+      <div
+        style={{
+          content: '',
+          clear: 'both',
+          display: 'block',
+        }}
+      />
     </Fragment>
   );
 }
@@ -73,5 +81,7 @@ MemberInfo.propTypes = {
 };
 MemberInfo.defaultProps = {
   member: { name: 'FOO', dept: 'FOO', gender: 'FOO' },
-  remove: () => { 'FOO'; },
+  remove: () => {
+    'FOO';
+  },
 };

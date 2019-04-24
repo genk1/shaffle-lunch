@@ -17,7 +17,7 @@ export default function AddMember({ add }) {
       setErrorMessage('');
       return true;
     }
-    setErrorMessage('内容に不備があります');
+    setErrorMessage('内容に不備があります!');
   };
 
   return (
