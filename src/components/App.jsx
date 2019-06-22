@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect, useReducer } from 'react';
+import membersJson from '../members.json';
 import AddMember from './AddMember';
 import MemberInfo from './MemberInfo';
 import GroupMembers from './GroupMembers';
 import Button from './Button';
-import membersJson from './members.json';
 
 const initialMember = {
   members: membersJson,

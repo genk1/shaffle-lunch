@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-
 const DelayItem = ({ time, ...props }) => {
   const [showStatus, setShowStatus] = useState('hide');
   useEffect(() => {
-    const timer = window.setTimeout(() => { setShowStatus(''); }, time);
+    const timer = window.setTimeout(() => {
+      setShowStatus('');
+    }, time);
     return () => window.clearTimeout(timer);
   }, []);
   return (
@@ -18,7 +19,6 @@ const DelayItem = ({ time, ...props }) => {
 };
 
 const GroupMembers = ({ groupMembers }) => (
-
   <section>
     <table>
       <tbody>
@@ -27,7 +27,9 @@ const GroupMembers = ({ groupMembers }) => (
             <th>{val}</th>
             {groupMembers[val].map((member, memberIndex) => (
               <td key={member.name}>
-                <DelayItem time={((valIndex * arr.length) + (memberIndex + 1)) * 500}>
+                <DelayItem
+                  time={(valIndex * arr.length + (memberIndex + 1)) * 500}
+                >
                   {member.name}
                 </DelayItem>
               </td>
@@ -50,6 +52,5 @@ GroupMembers.defaultProps = {
 DelayItem.defaultProps = {
   time: 3,
 };
-
 
 export default GroupMembers;

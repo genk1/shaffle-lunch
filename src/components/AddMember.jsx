@@ -51,7 +51,7 @@ export default function AddMember({ add }) {
           checked={gender === '男性'}
           onChange={e => setGender(e.target.value)}
         />
-          男性
+        男性
       </label>
       <label htmlFor="female">
         <input
@@ -62,12 +62,9 @@ export default function AddMember({ add }) {
           checked={gender === '女性'}
           onChange={e => setGender(e.target.value)}
         />
-          女性
+        女性
       </label>
-      <Button
-        onClickFunction={() => checkValues()}
-        text="登録"
-      />
+      <Button onClickFunction={() => checkValues()} text="登録" />
       {errorMessage && <span>{errorMessage}</span>}
     </div>
   );
@@ -77,5 +74,7 @@ AddMember.propTypes = {
   add: PropTypes.func,
 };
 AddMember.defaultProps = {
-  add: () => { 'FOO'; },
+  add: () => {
+    'FOO';
+  },
 };
